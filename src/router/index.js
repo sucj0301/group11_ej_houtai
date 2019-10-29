@@ -116,6 +116,13 @@ export const asyncRoutes = [
         component: () => import('@/pages/customer/List'),
         name: 'customer',
         meta: { title: '顾客管理', icon: 'edit', noCache: true }
+      },
+      {
+        path: 'Details',
+        component: () => import('@/pages/customer/Details'),
+        name: 'customer_details',
+        hidden: true,
+        meta: { title: '顾客详情', icon: 'tab' }
       }
     ]
   },
@@ -207,10 +214,17 @@ export const asyncRoutes = [
         component: () => import('@/pages/waiter/List'),
         name: 'waiter',
         meta: { title: '员工管理', icon: 'edit', noCache: true }
+      },
+      {
+        path: 'Details',
+        component: () => import('@/pages/waiter/Details'),
+        name: 'waiter_details',
+        hidden: true,
+        meta: { title: '员工详情', icon: 'tab' }
       }
     ]
   },
- 
+
   /*
   {
     path: '/permission',
