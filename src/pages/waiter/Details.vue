@@ -6,6 +6,8 @@
     </div>
     <div>姓名:{{ waiter.realname }}</div>
     <div>手机号:{{ waiter.telephone }}</div>
+    <div>id:{{ waiter.id }}</div>
+
   </div>
 
 </template>

@@ -3,9 +3,11 @@
     <h2>员工管理</h2>
     <!-- 表格 -->
     <el-table :data="waiters.list">
+      <el-table-column label="员工编号" prop="id" />
       <el-table-column label="姓名" prop="realname" />
+      <el-table-column label="密码" prop="password" />
+      <el-table-column label="性别" prop="gender" />
       <el-table-column label="手机号" prop="telephone" />
-      <el-table-column label="卡号" prop="idcard" />
       <el-table-column label="状态" prop="status" />
       <el-table-column label="操作">
         <template #default="record">
@@ -50,7 +52,7 @@ export default {
     },
     todetail(waiter) {
       this.$router.push({
-        path: '/Details',
+        path: '/waiter/Details',
         query: { waiter }
       })
     }
