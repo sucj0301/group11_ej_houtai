@@ -1,5 +1,5 @@
 <template>
-  <div class="customerDetails">
+  <div class="customer_details">
     <h2>顾客详情</h2>
 
     <el-button type="primary" size="small" plain @click="backHandler">返回</el-button>
@@ -30,7 +30,6 @@ export default {
     }
   },
   created() {
-    console.log(this.$route)
     const id = this.$route.query.id
     this.findAddressByCustomerId(id)
   },

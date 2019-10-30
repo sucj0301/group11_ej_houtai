@@ -14,6 +14,8 @@
         </template>
       </el-table-column>
     </el-table>
+    <!-- / 表格 -->
+
   </div>
 </template>
 <script>
@@ -44,7 +46,6 @@ export default {
       this.$router.push({
         path: '/customer/Details',
         query: { id: customer.id }
-        // params:{id:1}
       })
     }
   }
