@@ -4,11 +4,11 @@
     <!-- 按钮组 -->
     <div class="btns">
       <el-button type="primary" size="small" plain @click="addProductHandler">添加</el-button>
-      <el-button type="danger" size="small" plain>批量删除</el-button>
+      <el-button type="danger" size="small" plain @click="batchDeleteHandler">批量删除</el-button>
     </div>
     <!-- / 按钮组 -->
     <!-- 表单 -->
-    <el-dialog title="添加产品信息" :visible.sync="visible" :close="clearValidateHandler" :before-close="msgBoxCloseHandler">
+    <el-dialog :title="title" :visible.sync="visible" :before-close="msgBoxCloseHandler" @close="clearValidateHandler">
       {{ product }}
       <el-form ref="productForm" :model="product" :rules="rules">
         <el-form-item label="产品名称" label-width="100px" prop="name">
@@ -49,14 +49,14 @@
     </el-dialog>
     <!-- / 表单 -->
     <!-- 表格 -->
-    <el-table :data="products" size="small">
+    <el-table :data="products.list" size="small" @selection-change="idsChangeHandler">
       <el-table-column type="selection" width="55" />
       <el-table-column prop="id" label="产品编号" />
       <el-table-column prop="categoryId" label="所属分类" />
       <el-table-column prop="name" label="产品名称" />
       <el-table-column prop="description" label="描述" />
       <el-table-column prop="price" label="价格" />
-      <el-table-column label="操作" width="150px" align="center">
+      <el-table-column label="操作" width="200px" align="center">
         <template #default="record">
           <a href="" class="el-icon-delete" @click.prevent="deleteHandler(record.row.id)" />&nbsp;
           <a href="" class="el-icon-edit-outline" @click.prevent="editHandler(record.row)" />&nbsp;
@@ -65,7 +65,16 @@
       </el-table-column>
     </el-table>
     <!-- / 表格 -->
-
+    <!-- 分页 -->
+    <!-- page-size表示每页显示条目个数 -->
+    <el-pagination
+      layout="prev,pager,next"
+      :current-page="products.page+1"
+      :page-size="products.pageSize"
+      :total="products.total"
+      @current-change="pageChangeHandler"
+    />
+    <!-- / 分页 -->
   </div>
 </template>
 <script>
@@ -73,8 +82,13 @@ import { mapState, mapGetters, mapMutations, mapActions } from 'vuex'
 export default {
   data() {
     return {
+      ids: [],
       fileList: [],
       product: {},
+      params: {
+        page: 0,
+        pageSize: 5 // 每页的数据条数
+      },
       rules: {
         name: [
           { required: true, message: '请输入产品名称', trigger: 'blur' }, // 'blur'是鼠标失去焦点的时候会触发验证
@@ -95,17 +109,43 @@ export default {
     }
   },
   created() {
-    this.findAllProducts()
+    this.findAllProducts(this.params)
     this.findAllCategories()
   },
   computed: {
-    ...mapState('product', ['products', 'categories', 'visible'])
+    ...mapState('product', ['products', 'categories', 'visible', 'title', 'refreshProduct'])
   },
   methods: {
-    ...mapActions('product', ['findAllProducts', 'deleteByCategoryId', 'findAllCategories', 'saveOrUpdateProducts']),
-    ...mapMutations('product', ['showModal', 'closeModal']),
+    ...mapActions('product', ['findAllProducts', 'deleteByCategoryId', 'findAllCategories', 'saveOrUpdateProducts', 'batchDeleteProducts']),
+    ...mapMutations('product', ['showModal', 'closeModal', 'setTitle']),
 
     // 普通方法
+    // 多选。拿ids
+    idsChangeHandler(val) {
+      this.ids = val.map(item => item.id)
+      // console.log(this.ids);
+    },
+    // 批量删除
+    batchDeleteHandler() {
+      this.$confirm('确认删除吗？', '提示', {
+        type: 'warning'
+      }).then(() => {
+        this.batchDeleteProducts(this.ids)
+          .then((response) => {
+            this.$message({ type: 'success', message: response.statusText })
+          })
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消删除'
+        })
+      })
+    },
+    // 页数改变时
+    pageChangeHandler(page) {
+      this.params.page = page - 1
+      this.findAllProducts(this.params)
+    },
     // 上传成功
     uploadSuccessHandler(response) {
       // console.log(response);
@@ -122,7 +162,7 @@ export default {
     },
     // 清空表单验证
     clearValidateHandler() {
-      this.$refs.productForm.resetFields()
+      this.$refs.productForm.clearValidate()
     },
     // 通过点击 X 关闭模态框
     msgBoxCloseHandler(done) {
@@ -138,7 +178,7 @@ export default {
       // 1.清空表单
       this.product = {}
       // 2.修改提示信息
-
+      this.setTitle('添加产品信息')
       // 3.显示模态框
       this.showModal()
     },
@@ -164,10 +204,12 @@ export default {
       // 将当前行信息绑定到product
       this.product = row
       this.fileList.push({ name: 'old', url: row.photo })
+      this.setTitle('修改产品信息')
       this.showModal()
     },
-    // 提交信息
+    // 提交表单
     submitHandler() {
+      // console.log(this.product);
       this.$refs.productForm.validate((valid) => {
         if (valid) {
           this.saveOrUpdateProducts(this.product)

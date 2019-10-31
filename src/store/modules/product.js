@@ -1,13 +1,20 @@
-import { get, post } from '@/http/axios'
+import { get, post, post_array, post_json } from '@/http/axios'
+// import request from '@/utils/request'
+
 export default {
   namespaced: true,
   state: {
     visible: false,
+    title: '添加产品信息',
     products: [],
     categories: [],
     product: {} // 当前产品信息
   },
   mutations: { // 同步操作
+    // 设置模态框头部信息
+    setTitle(state, title) {
+      state.title = title
+    },
     // 显示模态框
     showModal(state) {
       state.visible = true
@@ -44,8 +51,9 @@ export default {
       return response
     },
     // 查询所有产品
-    async findAllProducts(context) {
-      const response = await get('/product/findAll')
+    async findAllProducts(context, params) {
+      const response = await post('/product/query', params)
+      // console.log(response.data);
       context.commit('refreshProducts', response.data)
     },
     // 查询所有栏目
@@ -60,6 +68,12 @@ export default {
       // 2.刷新
       dispatch('findAllProducts')
       // 3.提示
+      return response
+    },
+    // 批量删除产品信息
+    async batchDeleteProducts({ dispatch }, ids) {
+      const response = await post('/product/batchDelete?ids=' + ids)
+      dispatch('findAllProducts')
       return response
     }
   }
