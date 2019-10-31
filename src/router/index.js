@@ -149,6 +149,13 @@ export const asyncRoutes = [
         component: () => import('@/pages/category/List'),
         name: 'category',
         meta: { title: '栏目管理', icon: 'edit', noCache: true }
+      },
+      {
+        path: 'Details',
+        component: () => import('@/pages/category/Details'),
+        name: 'category_details',
+        hidden: true,
+        meta: { title: '栏目详情', icon: 'tab' }
       }
     ]
   },
@@ -175,6 +182,13 @@ export const asyncRoutes = [
         component: () => import('@/pages/order/List'),
         name: 'order',
         meta: { title: '订单管理', icon: 'edit', noCache: true }
+      },
+      {
+        path: 'Details',
+        component: () => import('@/pages/order/Details'),
+        name: 'sy_orders_details',
+        hidden: true,
+        meta: { title: '所有订单详情', icon: 'tab' }
       }
     ]
   },

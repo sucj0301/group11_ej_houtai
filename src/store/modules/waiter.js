@@ -1,4 +1,4 @@
-import { post } from '@/http/axios'
+import { get, post } from '@/http/axios'
 export default {
   namespaced: true,
   state: {
@@ -13,8 +13,9 @@ export default {
     }
   },
   actions: {
+    // 查询
     async findAllWaiters(context, params) {
-      const response = await post('/waiter/query', params)
+      const response = await get('/order/query', params)
       context.commit('refreshWaiters', response.data)
     }
   }

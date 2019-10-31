@@ -1,25 +1,24 @@
 <template>
   <div class="product">
     <h2>产品管理</h2>
-
   </div>
 </template>
 <script>
-import {mapState,mapGetters,mapMutations,mapActions} from 'vuex'
+import { mapState, mapGetters, mapMutations, mapActions } from 'vuex'
 export default {
-  data(){
+  data() {
     return {
 
     }
   },
-  created(){
+  computed: {
 
   },
-  computed:{
+  created() {
 
   },
-  methods:{
-  
+  methods: {
+
   }
 }
 </script>

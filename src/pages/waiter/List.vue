@@ -1,14 +1,16 @@
 <template>
   <div class="waiter">
-    <h2>员工管理</h2>
+    <h2 class="title">员工管理</h2>
     <!-- 表格 -->
-    <el-table :data="waiters.list">
-      <el-table-column label="员工编号" prop="id" />
-      <el-table-column label="姓名" prop="realname" />
-      <el-table-column label="密码" prop="password" />
-      <el-table-column label="性别" prop="gender" />
-      <el-table-column label="手机号" prop="telephone" />
-      <el-table-column label="状态" prop="status" />
+    <el-table :data="waiters" class="table">
+      <el-table-column label="员工编号" prop="waiter.id" />
+      <el-table-column label="姓名" prop="waiter.realname" />
+      <el-table-column label="类型" prop="waiter.type" />
+      <el-table-column label="性别" prop="waiter.gender" />
+      <el-table-column label="手机号" prop="waiter.telephone" />
+      <el-table-column label="身份证" prop="waiter.idCard" />
+      <el-table-column label="授权" prop="waiter.enabled" />
+      <el-table-column label="状态" prop="waiter.status" />
       <el-table-column label="操作">
         <template #default="record">
           <el-button type="success" icon="el-icon-document" circle @click="todetail(record.row)" />
@@ -16,15 +18,6 @@
       </el-table-column>
     </el-table>
     <!-- /表格 -->
-    <!-- 分页 -->
-    <el-pagination
-      layout="prev, pager, next"
-      :currnet-page="waiters.page+1"
-      :page-size="waiters.pageSize"
-      :total="waiters.total"
-      @current-change="pageChangeHandler"
-    />
-    <!-- /分页 -->
   </div>
 </template>
 <script>
@@ -33,8 +26,8 @@ export default {
   data() {
     return {
       params: {
-        page: 0,
-        pageSize: 5
+        customerId: '',
+        waiterId: ''
       }
     }
   },
@@ -46,10 +39,6 @@ export default {
   },
   methods: {
     ...mapActions('waiter', ['findAllWaiters']),
-    pageChangeHandler(page) {
-      this.params.page = page - 1
-      this.findAllWaiters(this.params)
-    },
     todetail(waiter) {
       this.$router.push({
         path: '/waiter/Details',
@@ -60,5 +49,13 @@ export default {
 }
 </script>
 <style scoped>
-
+.title{
+  margin: 0px;
+  padding: 20px;
+  height: 80px;
+  box-shadow:0px 0px 10px #ededed;
+}
+.table{
+  margin: 10px 20px;
+}
 </style>
