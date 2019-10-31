@@ -6,7 +6,17 @@
 
     <el-tabs v-model="activeName">
       <el-tab-pane label="基本信息" name="info">基本信息</el-tab-pane>
-      <el-tab-pane label="订单信息" name="orders">订单信息</el-tab-pane>
+      <el-tab-pane label="订单信息" name="orders">
+        <el-table :data="ordersFilter(this.$route.query.id)">
+          <el-table-column label="顾客编号" prop="customerId" />
+          <el-table-column label="员工编号" prop="waiterId" />
+          <el-table-column label="订单编号" prop="id" />
+          <el-table-column label="下单时间" prop="orderTime" />
+          <el-table-column label="地址编号" prop="addressId" />
+          <el-table-column label="总价" prop="total" />
+          <el-table-column label="订单状态" prop="status" />
+        </el-table>
+      </el-tab-pane>
       <el-tab-pane label="服务地址" name="address">
         <el-table :data="address">
           <el-table-column label="省" prop="province" />
@@ -22,7 +32,7 @@
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex'
+import { mapState, mapGetters, mapMutations, mapActions } from 'vuex'
 export default {
   data() {
     return {
@@ -32,12 +42,17 @@ export default {
   created() {
     const id = this.$route.query.id
     this.findAddressByCustomerId(id)
+    this.findAllOrders()
+    // console.log(this.ordersFilter(id))
   },
   computed: {
-    ...mapState('address', ['address'])
+    ...mapState('address', ['address', 'orders']),
+    ...mapState('customer', ['orders']),
+    ...mapGetters('customer', ['ordersFilter'])
   },
   methods: {
-    ...mapActions('address', ['findAddressByCustomerId']),
+    ...mapActions('address', ['findAddressByCustomerId', 'findAllOrders']),
+    ...mapActions('customer', ['findAllOrders']),
 
     // 普通方法
     backHandler() {
