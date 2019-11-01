@@ -1,25 +1,36 @@
-import request from '@/utils/request'
+import { get } from '@/http/axios'
 export default {
   namespaced: true,
   state: {
-    customers: []
+    customers: [],
+    orders: []
+  },
+  getters: {
+    // 通过顾客id过滤订单信息
+    ordersFilter(state) {
+      return function(id) {
+        return this.orders.filter(item => item.customerId === id)
+      }
+    }
   },
   mutations: {
-    // 需要接受一个参数，这个参数就是customers
     refreshCustomers(state, customers) {
-      console.log('state->', state)
       state.customers = customers
+    },
+    refreshOrders(state, orders) {
+      state.orders = orders
     }
   },
   actions: {
-    // async findAllCustomers({commit,dispatch,getters,state}){
+    // 查询所有顾客信息
     async findAllCustomers(context) {
-      console.log('context->', context)
-      // 1. 查询所有顾客信息
-      const response = await request.get('http://39.96.21.48:6677/customer/findAll')
-      // alert(JSON.stringify(response));
-      // 2. 将顾客信息设置到state.customers中
+      const response = await get('/customer/findAll')
       context.commit('refreshCustomers', response.data)
+    },
+    // 查询所有订单信息
+    async findAllOrders({ commit }) {
+      const response = await get('/order/findAll')
+      commit('refreshOrders', response.data)
     }
   }
 }

@@ -10,10 +10,12 @@
       <el-table-column prop="status" label="状态" />
       <el-table-column label="操作" width="100px" align="center">
         <template #default="record">
-          <a href="" @click.prevent="toDetailsHandler(record.row)">详情</a>
+          <a href="" @click.prevent="toDetailsHandler(record.row.id)">详情</a>
         </template>
       </el-table-column>
     </el-table>
+    <!-- / 表格 -->
+
   </div>
 </template>
 <script>
@@ -38,13 +40,13 @@ export default {
     idsChangeHandler(val) {
       this.ids = val.map(item => item.id)
     },
-    toDetailsHandler(customer) {
+    toDetailsHandler(id) {
       // 跳转到顾客详情页面
       // this.$router.push("/customerDetails")
       this.$router.push({
         path: '/customer/Details',
-        query: { id: customer.id }
-        // params:{id:1}
+        // query: { id:customer.id }
+        query: { id }
       })
     }
   }
