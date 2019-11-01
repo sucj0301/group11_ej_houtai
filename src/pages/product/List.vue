@@ -1,8 +1,6 @@
 <template>
   <div class="product">
     <h2>产品管理</h2>
-<<<<<<< HEAD
-=======
     <!-- 按钮组 -->
     <div class="btns">
       <el-button type="primary" size="small" plain @click="addProductHandler">添加</el-button>
@@ -77,7 +75,6 @@
       @current-change="pageChangeHandler"
     />
     <!-- / 分页 -->
->>>>>>> b1a708f6f028e24fa6bd7b3bf11281cab806721a
   </div>
 </template>
 <script>
@@ -111,16 +108,6 @@ export default {
       }
     }
   },
-<<<<<<< HEAD
-  computed: {
-
-  },
-  created() {
-
-  },
-  methods: {
-
-=======
   created() {
     this.findAllProducts(this.params)
     this.findAllCategories()
@@ -241,7 +228,6 @@ export default {
         query: { id }
       })
     }
->>>>>>> b1a708f6f028e24fa6bd7b3bf11281cab806721a
   }
 }
 </script>

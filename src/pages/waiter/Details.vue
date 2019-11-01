@@ -10,39 +10,39 @@
       <el-tab-pane label="基本信息">
         <div class="content">
           <el-row class="row">
-            <el-col :span="12"><div class="grid-content bg-purple">员工名字：{{ waiter.waiter.realname }}</div></el-col>
-            <el-col :span="12"><div class="grid-content bg-purple-light">员工id：{{ waiter.waiter.id }}</div></el-col>
+            <el-col :span="12"><div class="grid-content bg-purple">员工名字：{{ waiter.realname }}</div></el-col>
+            <el-col :span="12"><div class="grid-content bg-purple-light">员工id：{{ waiter.id }}</div></el-col>
           </el-row>
           <el-row class="row">
-            <el-col :span="12"><div class="grid-content bg-purple">电话号：{{ waiter.waiter.telephone }}</div></el-col>
-            <el-col :span="12"><div class="grid-content bg-purple-light">密码：{{ waiter.waiter.password }}</div></el-col>
+            <el-col :span="12"><div class="grid-content bg-purple">电话号：{{ waiter.telephone }}</div></el-col>
+            <el-col :span="12"><div class="grid-content bg-purple-light">密码：{{ waiter.password }}</div></el-col>
           </el-row>
           <el-row class="row">
-            <el-col :span="12"><div class="grid-content bg-purple">注册时间：{{ waiter.waiter.registerTime }}</div></el-col>
-            <el-col :span="12"><div class="grid-content bg-purple-light">照片：{{ waiter.waiter.photo }}</div></el-col>
+            <el-col :span="12"><div class="grid-content bg-purple">注册时间：{{ waiter.registerTime }}</div></el-col>
+            <el-col :span="12"><div class="grid-content bg-purple-light">照片：{{ waiter.photo }}</div></el-col>
           </el-row>
           <el-row class="row">
-            <el-col :span="12"><div class="grid-content bg-purple">评分：{{ waiter.waiter.score }}</div></el-col>
-            <el-col :span="12"><div class="grid-content bg-purple-light">订货量：{{ waiter.waiter.orderQuantity }}</div></el-col>
+            <el-col :span="12"><div class="grid-content bg-purple">评分：{{ waiter.score }}</div></el-col>
+            <el-col :span="12"><div class="grid-content bg-purple-light">订货量：{{ waiter.orderQuantity }}</div></el-col>
           </el-row>
           <el-row class="row">
-            <el-col :span="12"><div class="grid-content bg-purple">身份证照片正片：{{ waiter.waiter.orderQuantity }}</div></el-col>
-            <el-col :span="12"><div class="grid-content bg-purple-light">身份证照片底片：{{ waiter.waiter.orderQuantity }}</div></el-col>
+            <el-col :span="12"><div class="grid-content bg-purple">身份证照片正片：{{ waiter.orderQuantity }}</div></el-col>
+            <el-col :span="12"><div class="grid-content bg-purple-light">身份证照片底片：{{ waiter.orderQuantity }}</div></el-col>
           </el-row>
           <el-row class="row">
-            <el-col :span="12"><div class="grid-content bg-purple">身份证：{{ waiter.waiter.idCard }}</div></el-col>
-            <el-col :span="12"><div class="grid-content bg-purple-light">银行卡：{{ waiter.waiter.bankCard }}</div></el-col>
+            <el-col :span="12"><div class="grid-content bg-purple">身份证：{{ waiter.idCard }}</div></el-col>
+            <el-col :span="12"><div class="grid-content bg-purple-light">银行卡：{{ waiter.bankCard }}</div></el-col>
           </el-row>
           <el-row class="row">
-            <el-col :span="12"><div class="grid-content bg-purple">银行卡照片：{{ waiter.waiter.bankCard }}</div></el-col>
-            <el-col :span="12"><div class="grid-content bg-purple-light">地址id：{{ waiter.waiter.addressId }}</div></el-col>
+            <el-col :span="12"><div class="grid-content bg-purple">银行卡照片：{{ waiter.bankCard }}</div></el-col>
+            <el-col :span="12"><div class="grid-content bg-purple-light">地址id：{{ waiter.addressId }}</div></el-col>
           </el-row>
         </div>
       </el-tab-pane>
       <el-tab-pane label="订单信息">
         <div class="content">
           <!-- 表格 -->
-          <el-table :data="waiters" class="table">
+          <el-table :data="waiterfilter(waiter.id)" class="table">
             <el-table-column label="订单id" prop="id" />
             <el-table-column label="下单时间" prop="orderTime" />
             <el-table-column label="总价" prop="total" />
@@ -71,19 +71,25 @@ import { mapState, mapGetters, mapMutations, mapActions } from 'vuex'
 export default {
   data() {
     return {
-      waiter: {}
+      waiter: {},
+      params: {
+        customerId: '',
+        waiterId: ''
+      }
     }
   },
   created() {
     console.log('当前路由', this.$route)
     this.waiter = this.$route.query.waiter
-    this.findAllWaiters(this.params)
+    this.findAllWaiters()
+    this.findAllOreders(this.params)
   },
   computed: {
-    ...mapState('waiter', ['waiters'])
+    ...mapState('waiter', ['waiters', 'orders']),
+    ...mapGetters('waiter', ['waiterfilter'])
   },
   methods: {
-    ...mapActions('waiter', ['findAllWaiters']),
+    ...mapActions('waiter', ['findAllWaiters', 'findAllOreders']),
     backHandler() {
       // this.$router.push("/waiter")
       this.$router.go(-1)
