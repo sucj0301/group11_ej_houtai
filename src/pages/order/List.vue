@@ -44,7 +44,7 @@
             <el-table-column label="顾客id" prop="customerId" />
             <el-table-column label="派单">
               <template #default="record">
-                <el-button type="success" icon="el-icon-document" circle @click="pdedit(record.row)" />
+                <el-button type="success" icon="el-icon-check" circle @click="pdedit(record.row)" />
               </template>
             </el-table-column>
           </el-table>
@@ -75,7 +75,7 @@
             <el-table-column label="顾客id" prop="customerId" />
             <el-table-column label="取消">
               <template #default="record">
-                <el-button type="success" icon="el-icon-document" circle @click="jdcancel(record.row)" />
+                <el-button type="danger" icon="el-icon-close" circle @click="jdcancel(record.row)" />
               </template>
             </el-table-column>
           </el-table>
